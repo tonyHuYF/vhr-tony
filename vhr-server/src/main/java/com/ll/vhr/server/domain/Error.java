@@ -36,6 +36,9 @@ public class Error {
     public static final Error read_file_stream_error = new Error(40020, "读取文件流错误");
     public static final Error access_token_error = new Error(40021, "登录凭证失效，请重新登录。");
 
+
+    public static final Error data_bind_error = new Error(20001, "该数据有关联数据，操作失败");
+
     private int code;
     private String message;
 
