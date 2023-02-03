@@ -7,9 +7,9 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://175.178.108.7:3306/vhr?useUnicode=true&characterEncoding=utf8&autoReconnect=true&rewriteBatchedStatements=TRUE&serverTimezone=Hongkong&allowMultiQueries=true&nullCatalogMeansCurrent=true
+      url: jdbc:mysql://192.168.1.215:3306/vhr?useUnicode=true&characterEncoding=utf8&autoReconnect=true&rewriteBatchedStatements=TRUE&serverTimezone=Hongkong&allowMultiQueries=true
       username: root
-      password: TT9pC9oNq8y!&BMq
+      password: 123456
   redis:
     host: 175.178.108.7
     port: 6379
@@ -24,3 +24,4 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mybatis/**/*.xml

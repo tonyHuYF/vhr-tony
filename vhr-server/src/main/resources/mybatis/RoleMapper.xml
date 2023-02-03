@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ll.vhr.server.mapper.RoleMapper">
+
+
+    <select id="getRolesByMId" parameterType="java.lang.Integer" resultType="com.ll.vhr.server.domain.Role">
+        select distinct r.*
+        from role r
+                 inner join menu_role mr on mr.rid = r.id
+    </select>
+</mapper>

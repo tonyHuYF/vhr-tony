@@ -1,0 +1,16 @@
+package com.ll.vhr.server.service;
+
+import com.ll.vhr.server.domain.Role;
+
+import java.util.List;
+
+public interface RoleService {
+
+    public List<Role> getAllRoles();
+
+    public Integer addRole(Role role);
+
+    public Integer deleteRoleById(Integer rid);
+
+    public List<Role> getRolesByMId(Integer mid);
+}
