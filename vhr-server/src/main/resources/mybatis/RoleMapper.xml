@@ -9,4 +9,10 @@
         from role r
                  inner join menu_role mr on mr.rid = r.id
     </select>
+    <select id="getAllMenuRoleRel" resultType="com.ll.vhr.server.domain.dto.MenuRoleRel">
+        SELECT mr.mid, r.*
+        from menu_role mr
+                 left join role r on mr.rid = r.id
+        order by mid, r.id
+    </select>
 </mapper>

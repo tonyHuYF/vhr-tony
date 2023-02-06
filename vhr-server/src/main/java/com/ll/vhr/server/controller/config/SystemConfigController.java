@@ -23,9 +23,9 @@ public class SystemConfigController {
 
     @GetMapping("/test")
     public ResultBean getMenuByHrId() {
-        ResultBean<List<Menu>> menusByHrId = menuService.getMenusByHrId();
+        List<Menu> allMenusWithRole = menuService.getAllMenusWithRole();
 
-        return menusByHrId;
+        return new ResultBean<>(allMenusWithRole);
     }
 
 }

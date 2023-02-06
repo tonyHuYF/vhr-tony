@@ -1,6 +1,7 @@
 package com.ll.vhr.server.service.impl;
 
 import com.ll.vhr.server.domain.Role;
+import com.ll.vhr.server.domain.dto.MenuRoleRel;
 import com.ll.vhr.server.mapper.RoleMapper;
 import com.ll.vhr.server.service.RoleService;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> getRolesByMId(Integer mid) {
         return roleMapper.getRolesByMId(mid);
+    }
+
+    @Override
+    public List<MenuRoleRel> getAllMenuRoleRel() {
+        return roleMapper.getAllMenuRoleRel();
     }
 }

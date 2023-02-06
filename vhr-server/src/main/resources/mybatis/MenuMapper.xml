@@ -8,5 +8,6 @@
         from menu m
                  inner join menu_role mr on mr.mid = m.id
                  inner JOIN hr_role hr on hr.rid = mr.rid and hr.hrid = #{hrid}
+        order by m.id
     </select>
 </mapper>
