@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class MenuServiceImpl implements MenuService {
 
     @Resource
@@ -37,23 +36,14 @@ public class MenuServiceImpl implements MenuService {
         //查询菜单
         List<Menu> menus = menuMapper.selectList(new LambdaQueryWrapper<Menu>().eq(Menu::getEnabled, 1));
 
-        //为“所有”的父id补0
-        Map<Integer, List<Menu>> menusMap = menus.stream().collect(Collectors.groupingBy(
-                k -> k.getParentId() == null ? 0 : k.getParentId()));
+        //补全子菜单信息
+        List<Menu> result = hrMenus.stream().peek(p -> p.setChildren(getChildMenu(p, menus))).collect(Collectors.toList());
 
-        //补全子菜单、对应权限信息
-        hrMenus.forEach(p -> {
-            //子菜单
-            if (ObjectUtil.isNotEmpty(menusMap.get(p.getId()))) {
-                p.setChildren(menusMap.get(p.getId()));
-            }
-        });
-
-        return hrMenus;
+        return result;
     }
 
     @Override
-    @Cacheable(value = "menu",key = "'getAllMenusWithRole'")
+    @Cacheable(value = "menu", key = "'getAllMenusWithRole'")
     public List<Menu> getAllMenusWithRole() {
         //查询菜单
         List<Menu> menus = menuMapper.selectList(new LambdaQueryWrapper<Menu>().eq(Menu::getEnabled, 1));
@@ -76,17 +66,41 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    @Cacheable(value = "menu", key = "'getAllMenus'")
     public List<Menu> getAllMenus() {
-        return null;
+        List<Menu> menus = menuMapper.selectList(new LambdaQueryWrapper<Menu>().eq(Menu::getEnabled, 1));
+
+        //查询整颗树结构
+        List<Menu> list = menus.stream().filter(p -> p.getParentId() == 0)
+                .peek(p -> p.setChildren(getChildMenu(p, menus)))
+                .collect(Collectors.toList());
+
+        return list;
+    }
+
+    /**
+     * 获取子menu
+     */
+    private List<Menu> getChildMenu(Menu menu, List<Menu> list) {
+        List<Menu> children = list.stream().filter(p -> p.getParentId().intValue() == menu.getId().intValue())
+                .peek(m -> m.setChildren(getChildMenu(m, list)))
+                .collect(Collectors.toList());
+        return children;
     }
 
     @Override
-    public List<Menu> getMidsByRid(Integer rid) {
-        return null;
+    public List<Integer> getMidsByRid(Integer rid) {
+        return menuMapper.getMidsByRid(rid);
     }
 
     @Override
+    @Transactional
     public boolean updateMenuRole(Integer rid, Integer[] mids) {
-        return false;
+        menuMapper.deleteByRid(rid);
+        if (ObjectUtil.isEmpty(mids)) {
+            return true;
+        }
+        Integer result = menuMapper.insertRecord(rid, mids);
+        return result == mids.length;
     }
 }

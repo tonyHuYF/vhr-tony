@@ -10,4 +10,21 @@
                  inner JOIN hr_role hr on hr.rid = mr.rid and hr.hrid = #{hrid}
         order by m.id
     </select>
+    <select id="getMidsByRid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select mid
+        from menu_role
+        where rid = #{rid}
+    </select>
+
+    <delete id="deleteByRid">
+        delete
+        from menu_role
+        where rid = #{rid}
+    </delete>
+
+    <insert id="insertRecord">
+        insert into menu_role (mid,rid) values
+        <foreach collection="mids" item="item" separator=",">(#{item},#{rid})</foreach>
+    </insert>
+
 </mapper>
