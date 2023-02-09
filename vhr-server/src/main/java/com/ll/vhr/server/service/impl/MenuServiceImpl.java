@@ -47,7 +47,7 @@ public class MenuServiceImpl implements MenuService {
     @Cacheable(value = "menu", key = "'getAllMenusWithRole'")
     public List<Menu> getAllMenusWithRole() {
         //查询菜单
-        List<Menu> menus = menuMapper.selectList(new LambdaQueryWrapper<Menu>().eq(Menu::getEnabled, 1));
+        List<Menu> menus = menuMapper.selectList(null);
 
         //补录权限
         List<MenuRoleRel> allMenuRoleRel = roleService.getAllMenuRoleRel();
@@ -69,7 +69,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Cacheable(value = "menu", key = "'getAllMenus'")
     public List<Menu> getAllMenus() {
-        List<Menu> menus = menuMapper.selectList(new LambdaQueryWrapper<Menu>().eq(Menu::getEnabled, 1));
+        List<Menu> menus = menuMapper.selectList(null);
 
         //查询整颗树结构
         List<Menu> list = menus.stream().filter(p -> p.getParentId() == 0)

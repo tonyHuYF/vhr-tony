@@ -9,7 +9,7 @@ public interface DepartmentService {
 
     public void addDep(Department dep);
 
-    public void deleteDepById(Department dep);
+    public void deleteDepById(Integer id);
 
     public List<Department> getAllDepartmentsWithOutChildren();
 }

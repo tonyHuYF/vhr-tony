@@ -39,6 +39,10 @@ public class Error {
 
     public static final Error data_bind_error = new Error(20001, "该数据有关联数据，操作失败");
 
+    public static final Error exists_child_department_error = new Error(20002, "该部门下有子部门，操作失败");
+
+    public static final Error exists_employee_error = new Error(20003, "该部门下有员工，操作失败");
+
     private int code;
     private String message;
 

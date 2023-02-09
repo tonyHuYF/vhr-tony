@@ -47,6 +47,4 @@ public class Department implements Serializable {
     @TableField(exist = false)
     private List<Department> children = new ArrayList<>();
 
-    @TableField(exist = false)
-    private Integer result;
 }
