@@ -1,11 +1,14 @@
 package com.ll.vhr.server.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ll.vhr.server.domain.CommonException;
 import com.ll.vhr.server.domain.Department;
+import com.ll.vhr.server.domain.Employee;
 import com.ll.vhr.server.domain.Error;
 import com.ll.vhr.server.mapper.DepartmentMapper;
 import com.ll.vhr.server.service.DepartmentService;
+import com.ll.vhr.server.service.EmployeeService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Resource
     private DepartmentMapper departmentMapper;
+
+    @Resource
+    private EmployeeService employeeService;
 
     @Override
     @Cacheable(value = "department", key = "'getAllDepartments'")
@@ -62,10 +68,11 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new CommonException(Error.exists_child_department_error);
         }
 
-        //todo 查询 employee ,是否存在员工
-//        if(){
-//            throw new CommonException(Error.exists_employee_error);
-//        }
+        //查询 employee ,是否存在员工
+        List<Employee> employee = employeeService.getEmployeeByDeptId(id);
+        if (ObjectUtil.isNotEmpty(employee)) {
+            throw new CommonException(Error.exists_employee_error);
+        }
 
         //查看父节点是否仅有当前子节点，是的话，要将其is_parent改为0
         Long count = departmentMapper.selectCount(
