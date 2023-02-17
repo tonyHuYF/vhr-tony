@@ -15,4 +15,10 @@
                  left join role r on mr.rid = r.id
         order by mid, r.id
     </select>
+    <select id="getAllHrRoleRel" resultType="com.ll.vhr.server.domain.dto.HrRoleRel">
+        SELECT hrr.hrid, r.*
+        from hr_role hrr
+                 LEFT JOIN role r on r.id = hrr.rid
+        order by hrid, r.id
+    </select>
 </mapper>

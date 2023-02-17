@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ll.vhr.server.mapper.HrMapper">
+
+    <select id="getHrRolesById" parameterType="java.lang.Integer" resultType="com.ll.vhr.server.domain.Role">
+        SELECT r.*
+        from role r
+                 INNER JOIN hr_role hr on hr.rid = r.id
+        WHERE hr.hrid = #{id}
+    </select>
+
+    <delete id="deleteByHrid">
+        delete
+        from hr_role
+        where hrid = #{id}
+    </delete>
+
+    <insert id="insertRecord">
+        insert into hr_role (hrid,rid) values
+        <foreach collection="rids" item="item" separator=",">(#{item},#{hrid})</foreach>
+    </insert>
+
+</mapper>

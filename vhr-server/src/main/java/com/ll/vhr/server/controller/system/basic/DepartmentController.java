@@ -33,4 +33,16 @@ public class DepartmentController {
         return new ResultBean<>();
     }
 
+    @GetMapping("/test")
+    public void test() throws Exception {
+//        String privateFilePath = "D:\\tools\\项目用RSA公钥密钥\\id_key_rsa";
+//        String publicFilePath = "D:\\tools\\项目用RSA公钥密钥\\id_key_rsa.pub";
+//
+//        RsaUtil.generateKey(publicFilePath,privateFilePath,"tonyhu",2048);
+//
+//        System.out.println(RsaUtil.getPublicKey(publicFilePath));
+//
+//        System.out.println(RsaUtil.getPrivateKey(privateFilePath));
+    }
+
 }

@@ -3,9 +3,9 @@ package com.ll.vhr.server.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
-import java.io.Serializable;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * 权限信息
@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @Data
 @TableName("role")
-public class Role implements Serializable {
+public class Role implements GrantedAuthority {
 
     /**
      * id
@@ -31,5 +31,12 @@ public class Role implements Serializable {
      */
     private String nameZh;
 
-
+    /**
+     * 如果授予的权限可以当作一个String的话，就可以返回一个String
+     */
+    @Override
+    @JsonIgnore
+    public String getAuthority() {
+        return name;
+    }
 }
