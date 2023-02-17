@@ -3,6 +3,7 @@ package com.ll.vhr.server.controller.system.basic;
 import com.ll.vhr.server.domain.Department;
 import com.ll.vhr.server.domain.ResultBean;
 import com.ll.vhr.server.service.DepartmentService;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -14,6 +15,7 @@ public class DepartmentController {
     @Resource
     private DepartmentService departmentService;
 
+    @Secured("ROLE_manager")
     @GetMapping
     public ResultBean<List<Department>> getAllDepartments() {
         List<Department> allDepartments = departmentService.getAllDepartments();
