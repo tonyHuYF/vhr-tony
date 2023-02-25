@@ -16,6 +16,15 @@
         where rid = #{rid}
     </select>
 
+    <select id="getMenusByRoleIds" resultType="com.ll.vhr.server.domain.Menu">
+        select distinct m.*
+        from menu m
+        inner join menu_role mr on mr.mid = m.id
+        where mr.rid in
+        <foreach collection="rids" item="item" open="(" separator="," close=")">#{item}</foreach>
+        order by m.id
+    </select>
+
     <delete id="deleteByRid">
         delete
         from menu_role

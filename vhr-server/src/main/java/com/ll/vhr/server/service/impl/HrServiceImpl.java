@@ -11,6 +11,7 @@ import com.ll.vhr.server.domain.Role;
 import com.ll.vhr.server.domain.dto.HrRoleRel;
 import com.ll.vhr.server.mapper.HrMapper;
 import com.ll.vhr.server.service.HrService;
+import com.ll.vhr.server.service.MenuService;
 import com.ll.vhr.server.service.RoleService;
 import com.ll.vhr.server.util.HrUtil;
 import org.springframework.cache.annotation.CacheEvict;
@@ -35,13 +36,23 @@ public class HrServiceImpl implements HrService {
     @Resource
     private RoleService roleService;
 
+    @Resource
+    private MenuService menuService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Hr hr = hrMapper.selectOne(new LambdaQueryWrapper<Hr>().eq(Hr::getUsername, username));
         if (ObjectUtil.isEmpty(hr)) {
             throw new CommonException(Error.username_not_exist);
         }
-        hr.setRoles(hrMapper.getHrRolesById(hr.getId()));
+        List<Role> roles = hrMapper.getHrRolesById(hr.getId());
+
+        if (ObjectUtil.isNotEmpty(roles)) {
+            hr.setRoles(roles);
+            List<Integer> roleIds = roles.stream().map(Role::getId).collect(Collectors.toList());
+            hr.setMenus(menuService.getMenusByRoleIds(roleIds.toArray(new Integer[0])));
+        }
+
         return hr;
     }
 

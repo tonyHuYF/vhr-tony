@@ -1,5 +1,6 @@
 package com.ll.vhr.server.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,10 +8,13 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户信息
@@ -77,10 +81,38 @@ public class Hr implements UserDetails {
     @TableField(exist = false)
     private List<Role> roles;
 
+    /**
+     * 对应菜单权限
+     */
+    @TableField(exist = false)
+    private List<Menu> menus;
+
+    /**
+     * 权限--security用
+     */
+    @TableField(exist = false)
+    @JSONField(serialize = false)
+    private List<GrantedAuthority> authorities;
+
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        if (authorities != null) {
+            return authorities;
+        }
+
+        authorities = new ArrayList<>();
+
+        List<SimpleGrantedAuthority> roleList = roles.stream()
+                .map(p -> new SimpleGrantedAuthority(p.getName())).collect(Collectors.toList());
+
+        List<SimpleGrantedAuthority> menuList = menus.stream()
+                .map(p -> new SimpleGrantedAuthority(p.getComponent())).collect(Collectors.toList());
+
+        authorities.addAll(roleList);
+        authorities.addAll(menuList);
+
+        return authorities;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.ll.vhr.server.controller.config;
 import com.ll.vhr.server.domain.Menu;
 import com.ll.vhr.server.domain.ResultBean;
 import com.ll.vhr.server.service.MenuService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class SystemConfigController {
     private MenuService menuService;
 
     @GetMapping("/menu")
+    @PreAuthorize("hasAuthority('ROLE_admin')")
     public ResultBean<List<Menu>> getMenuByHrId() {
         List<Menu> menus = menuService.getMenusByHrId();
         return new ResultBean<>(menus);

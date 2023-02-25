@@ -3,6 +3,7 @@ package com.ll.vhr.server.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.ll.vhr.server.domain.Hr;
 import com.ll.vhr.server.domain.Menu;
 import com.ll.vhr.server.domain.Role;
 import com.ll.vhr.server.domain.dto.MenuRoleRel;
@@ -11,6 +12,7 @@ import com.ll.vhr.server.service.MenuService;
 import com.ll.vhr.server.service.RoleService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +32,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Menu> getMenusByHrId() {
-        //todo 先写死hid，之后替换
-        Integer hrid = 13;
+        Integer hrid = ((Hr) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         List<Menu> hrMenus = menuMapper.getMenusByHrId(hrid);
 
         //查询菜单
@@ -63,6 +64,12 @@ public class MenuServiceImpl implements MenuService {
             }
         });
 
+        return menus;
+    }
+
+    @Override
+    public List<Menu> getMenusByRoleIds(Integer[] rids) {
+        List<Menu> menus = menuMapper.getMenusByRoleIds(rids);
         return menus;
     }
 

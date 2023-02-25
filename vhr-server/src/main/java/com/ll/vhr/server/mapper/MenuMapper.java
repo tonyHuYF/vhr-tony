@@ -12,9 +12,11 @@ public interface MenuMapper extends BaseMapper<Menu> {
 
     public List<Menu> getMenusByHrId(Integer hrid);
 
+    public List<Menu> getMenusByRoleIds(@Param("rids") Integer[] rids);
+
     public List<Integer> getMidsByRid(Integer rid);
 
     public void deleteByRid(Integer rid);
 
-    public Integer insertRecord(@Param("rid") Integer rid,@Param("mids") Integer[] mids);
+    public Integer insertRecord(@Param("rid") Integer rid, @Param("mids") Integer[] mids);
 }
