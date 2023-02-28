@@ -8,6 +8,10 @@ import com.ll.vhr.server.util.ExceptionUtil;
 import com.ll.vhr.server.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -46,6 +50,29 @@ public class ExceptionControllerAdvice {
         }
         return new ResultBean<>(ex, prefix);
     }
+
+
+    /**
+     * 拦截捕获权限不足异常
+     */
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResultBean errorHandler(AccessDeniedException ex) {
+        String prefix = RandomUtil.randomString(10);
+        log.error(ExceptionUtil.getErrorInfoFromException(ex, prefix));
+        return new ResultBean<>(Error.unauthorized_data_error, prefix);
+    }
+
+    /**
+     * 拦截捕获登录异常
+     */
+    @ExceptionHandler(value ={InternalAuthenticationServiceException.class, BadCredentialsException.class})
+    public ResultBean errorHandler(AuthenticationException ex) {
+        String prefix = RandomUtil.randomString(10);
+        log.error(ExceptionUtil.getErrorInfoFromException(ex, prefix));
+        return new ResultBean<>(Error.username_password_not_exist, prefix);
+    }
+
+
 
     /**
      * 解决SpringMVC 接收List/数组大小默认限制为256个

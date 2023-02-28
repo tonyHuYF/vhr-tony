@@ -43,6 +43,7 @@ public class Error {
 
 
     public static final Error username_not_exist = new Error(30001, "用户名不存在!");
+    public static final Error username_password_not_exist = new Error(30002, "用户名或密码错误!");
 
     private int code;
     private String message;
